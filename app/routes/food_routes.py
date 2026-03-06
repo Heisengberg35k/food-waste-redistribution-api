@@ -6,10 +6,6 @@ from datetime import datetime
 
 food_bp = Blueprint("food", __name__)
 
-@food_bp.route("/test", methods=["GET"])
-def test_food():
-    return "Food route works"
-
 @food_bp.route("/", methods=["POST"])
 @jwt_required()
 def create_food():
@@ -52,3 +48,29 @@ def create_food():
     mongo.db.food.insert_one(food_data)
 
     return jsonify({"message": "Food listing created successfully"}), 201
+
+@food_bp.route("/", methods=["GET"])
+def get_all_food():
+    """
+    Retrieve all food listings.
+    """
+
+    # Fetch all documents from food collection
+    foods = mongo.db.food.find()
+
+    food_list = []
+
+    for food in foods:
+        food_list.append({
+            "id": str(food["_id"]),  # Convert ObjectId to string
+            "title": food["title"],
+            "description": food["description"],
+            "quantity": food["quantity"],
+            "expiry_date": food["expiry_date"],
+            "location": food["location"],
+            "status": food["status"],
+            "provider_id": food["provider_id"],
+            "created_at": food["created_at"]
+        })
+
+    return jsonify(food_list), 200
