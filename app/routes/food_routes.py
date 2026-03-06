@@ -52,17 +52,29 @@ def create_food():
 @food_bp.route("/", methods=["GET"])
 def get_all_food():
     """
-    Retrieve all food listings.
+    Retrieve food listings with optional filtering.
     """
 
-    # Fetch all documents from food collection
-    foods = mongo.db.food.find()
+    # Get query parameters from URL
+    city = request.args.get("city")
+    status = request.args.get("status")
+
+    # Build dynamic query
+    query = {}
+
+    if city:
+        query["location"] = city
+
+    if status:
+        query["status"] = status
+
+    foods = mongo.db.food.find(query)
 
     food_list = []
 
     for food in foods:
         food_list.append({
-            "id": str(food["_id"]),  # Convert ObjectId to string
+            "id": str(food["_id"]),
             "title": food["title"],
             "description": food["description"],
             "quantity": food["quantity"],
