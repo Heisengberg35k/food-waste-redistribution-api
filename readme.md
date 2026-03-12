@@ -110,3 +110,12 @@ http://127.0.0.1:5000
 GET /api/food/
 
 Returns all food listings in the system.
+
+## Authentication System
+
+This project implements manual JWT authentication using PyJWT.
+Token generation, signature verification, expiration handling, and role-based access control are implemented without Flask-JWT-Extended.
+
+## Food Lifecycle
+
+available → requested → approved → completed

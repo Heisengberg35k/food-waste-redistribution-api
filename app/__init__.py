@@ -15,4 +15,7 @@ def create_app():
     from .routes.food_routes import food_bp
     app.register_blueprint(food_bp, url_prefix="/api/food")
 
+    from .routes.analytics_routes import analytics_bp
+    app.register_blueprint(analytics_bp, url_prefix="/api/analytics")
+
     return app
